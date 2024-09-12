@@ -276,7 +276,10 @@
             counter--;
             showSlide();
         });
-
+ // Automatically move to the next slide every 5 seconds
+    setInterval(() => {
+        next.click();  // Trigger the "next" button click to move to the next slide
+    }, 5000);
         // Initialize the first slide
         showSlide();
     </script>
