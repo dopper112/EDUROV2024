@@ -72,7 +72,39 @@
             display: block;
             margin: 20px auto;
         }
-        
+        .slider-container {
+            max-width: 100%;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slides img {
+            width: 100%;
+            object-fit: cover;
+        }
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 16px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            font-size: 18px;
+        }
+        .prev {
+            left: 0;
+        }
+        .next {
+            right: 0;
+        }
+
         /* Responsive styles */
         @media screen and (max-width: 768px) {
             .container {
@@ -88,6 +120,9 @@
             .content-section {
                 padding: 15px;
             }
+            .slides img {
+                height: 350px;
+            }
         }
         
         @media screen and (max-width: 480px) {
@@ -102,6 +137,13 @@
                 display: block;
                 width: 100%;
                 padding: 10px 0;
+            }
+            .slides img {
+                height: 250px;
+            }
+            .prev, .next {
+                padding: 10px;
+                font-size: 14px;
             }
         }
     </style>
@@ -125,7 +167,15 @@
             </ul>
         </div>
     </nav>
-    
+    <div class="slider-container">
+        <div class="slides">
+            <img src="img/1.png" alt="Slide 1">
+            <img src="img/8.png" alt="Slide 2">
+            <img src="img/11.png" alt="Slide 3">
+        </div>
+        <button class="prev">&#10094;</button>
+        <button class="next">&#10095;</button>
+    </div>
     <main class="container">
         <section id="rules" class="content-section">
             <h2>กติกาการแข่งขัน</h2>
@@ -193,6 +243,42 @@
                 gsap.to(window, {scrollTo: targetID, duration: 1, ease: 'power2.inOut'});
             });
         });
+        // Smooth scroll for navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetID = this.getAttribute('href');
+                gsap.to(window, {scrollTo: targetID, duration: 1, ease: 'power2.inOut'});
+            });
+        });
+
+        // Image slider functionality
+        const slides = document.querySelector('.slides');
+        const slideImages = document.querySelectorAll('.slides img');
+        const prev = document.querySelector('.prev');
+        const next = document.querySelector('.next');
+
+        let counter = 0;
+        const size = slideImages[0].clientWidth;
+
+        function showSlide() {
+            slides.style.transform = 'translateX(' + (-size * counter) + 'px)';
+        }
+
+        next.addEventListener('click', () => {
+            if (counter >= slideImages.length - 1) counter = -1;
+            counter++;
+            showSlide();
+        });
+
+        prev.addEventListener('click', () => {
+            if (counter <= 0) counter = slideImages.length;
+            counter--;
+            showSlide();
+        });
+
+        // Initialize the first slide
+        showSlide();
     </script>
 </body>
 </html>
